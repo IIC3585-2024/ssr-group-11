@@ -35,24 +35,26 @@ const Home = ({ session, series }) => {
 }
 
 export async function getServerSideProps(context) {
-  // REEMPLAZAR POR LA BASE DE DATOS
   const session = await getSession(context);
-  const options = {
+  let series = []
+
+  try {
+    const res = await fetch('/api/series', {
       method: 'GET',
       headers: {
-        accept: 'application/json',
-        Authorization: `Bearer ${process.env.TOKEN}`
-      }
-  };
-
-  const res = await fetch('https://api.themoviedb.org/3/tv/popular?language=en-US&page=1', options)
-  if (!res.ok) {
-    throw new Error('Network response was not ok' + res.statusText);
+        'Content-Type': 'application/json',
+      },
+    });
+    if (res.ok) {
+      console.log('Series obtenidas con éxito');
+      const data = res.json();
+      series = data
+    } else {
+      console.error('Error en get series');
+    }
+  } catch (error) {
+    console.error('Error en la solicitud:', error);
   }
-  // --------------------------------------------------
-  
-  const data = await res.json();
-  const series = data.results
 
   return {
     props: { session, series },

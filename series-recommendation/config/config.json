@@ -1,0 +1,15 @@
+{
+  "development": {
+    "url": "postgres://sofiapavlovic:pavlovic3533@localhost:5432/seriesdb",
+    "dialect": "postgres"
+  },
+  "test": {
+    "url": "postgres://sofiapavlovic:pavlovic3533@localhost:5432/seriesdb",
+    "dialect": "postgres"
+  },
+  "production": {
+    "url": "postgres://sofiapavlovic:pavlovic3533@localhost:5432/seriesdb",
+    "dialect": "postgres"
+  }
+}
+

@@ -12,13 +12,17 @@
     "mongoose": "^8.4.3",
     "next": "14.2.4",
     "next-auth": "^4.24.7",
+    "pg": "^8.12.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "sequelize": "^6.37.3",
+    "sequelize-cli": "^6.6.2"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "dotenv": "^16.4.5",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "mini-css-extract-plugin": "^2.9.0",

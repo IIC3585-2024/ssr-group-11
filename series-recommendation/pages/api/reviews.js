@@ -1,34 +1,29 @@
-import connectMongo from '../../lib/mongodb';
-import Review from '../../models/Review';
-import { getSession } from 'next-auth/react';
+import { addReview, getReviews } from '../../lib/services';
 
-export default async (req, res) => {
-  const session = await getSession({ req });
+export default async function handler(req, res) {
+  if (req.method === 'GET') {
+    const { seriesId } = req.query;
 
-  if (!session) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
-  await connectMongo();
-
-  if (req.method === 'POST') {
+    try {
+      const reviews = await getReviews(seriesId);
+      res.status(200).json(reviews);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+      res.status(500).json({ error: 'Error fetching reviews' });
+    }
+  } else if (req.method === 'POST') {
     const { seriesId, rating, comment } = req.body;
+    const userId = req.session.id;
 
-    const review = new Review({
-      seriesId,
-      userId: session.user.id,
-      rating,
-      comment,
-    });
-
-    await review.save();
-
-    return res.status(201).json(review);
-  } else if (req.method === 'GET') {
-        const { seriesId } = req.query;
-        const reviews = await Review.find({ seriesId: seriesId });
-        return res.status(200).json(reviews);
+    try {
+      const newReview = await addReview(seriesId, userId, rating, comment);
+      res.status(201).json(newReview);
+    } catch (error) {
+      console.error('Error adding review:', error);
+      res.status(500).json({ error: 'Error adding review' });
+    }
   } else {
-        return res.status(405).json({ message: 'Method not allowed' });
+    res.setHeader('Allow', ['GET', 'POST']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
-};
+}

@@ -1,8 +1,7 @@
 import { getSession, useSession, signIn, signOut } from 'next-auth/react';
 import { useState } from 'react';
-import connectMongo from '../lib/mongodb.js';
 
-export default function AddSeries({ session, series }) {
+export default function AddSeries({ session }) {
   const [nombre, setNombre] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [temporadas, setTemporadas] = useState('');
@@ -13,63 +12,80 @@ export default function AddSeries({ session, series }) {
     e.preventDefault();
     if (!nombre || !descripcion) return;
 
-    const res = await fetch('/api/series', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ nombre, descripcion, temporadas, servicio, categoria }),
-    });
+    let userId = session.id
+    const formData = {
+      nombre,
+      descripcion,
+      temporadas,
+      servicio,
+      categoria,
+      userId
+    };
 
-    const newSeries = await res.json();
+    try {
+      const res = await fetch('/api/series', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-    setNombre('');
-    setDescripcion('');
-    setTemporadas('');
-    setServicio('');
-    setCategoria('');
+      if (res.ok) {
+        console.log('Serie agregada con éxito');
+        setNombre('');
+        setDescripcion('');
+        setTemporadas('');
+        setServicio('');
+        setCategoria('');
+      } else {
+        console.error('Error al agregar la serie', res);
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+    }
   };
 
   return (
-    <div>
+    <div className="max-w-xl mx-auto mt-8">
       {!session ? (
-        <h1>Debe iniciar sesión para agregar una serie</h1>
+        <h1 className="text-center text-2xl font-bold">Debe iniciar sesión para agregar una serie</h1>
       ) : (
         <div>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               placeholder="Nombre"
+              className="block w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
             />
             <textarea
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
-              placeholder="Descripcion"
+              placeholder="Descripción"
+              className="block w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
             />
             <textarea
               value={temporadas}
               onChange={(e) => setTemporadas(e.target.value)}
-              placeholder="Servicio Streaming"
+              placeholder="Temporadas"
+              className="block w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
             />
             <textarea
               value={servicio}
               onChange={(e) => setServicio(e.target.value)}
               placeholder="Servicio Streaming"
+              className="block w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
             />
             <textarea
               value={categoria}
               onChange={(e) => setCategoria(e.target.value)}
-              placeholder="categoria"
+              placeholder="Categoría"
+              className="block w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
             />
-            <button type="submit">Add Series</button>
+            <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">Agregar Serie</button>
           </form>
-          <ul>
-            {series.map(s => (
-              <li key={s.id}>{s.title}</li>
-            ))}
-          </ul>
         </div>
       )}
     </div>
@@ -78,14 +94,10 @@ export default function AddSeries({ session, series }) {
 
 export async function getServerSideProps(context) {
     const session = await getSession(context);
-    const db = await connectMongo();
-    const seriesRes = db.collection('series');
-    const series = seriesRes.rows;
 
     return {
         props: {
             session,
-            series,
         },
     };
 }

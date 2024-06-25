@@ -1,35 +1,28 @@
-import connectMongo from '../../lib/mongodb';
-import Series from '../../models/Series';
-import { getSession } from 'next-auth/react';
+import { addSeries, getSeries } from '../../lib/services';
+import db from '../../models';
 
-export default async (req, res) => {
-  const session = await getSession({ req });
+export default async function handler(req, res) {
+  await db.sequelize.sync();
+  if (req.method === 'GET') {
+    try {
+      const series = await getSeries();
+      res.status(200).json(series);
+    } catch (error) {
+      console.error('Error fetching series:', error);
+      res.status(500).json({ error: 'Error fetching series' });
+    }
+  } else if (req.method === 'POST') {
+    const { nombre, descripcion, temporadas, servicio, categoria, userId } = req.body;
 
-  if (!session) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
-  await connectMongo();
-
-  if (req.method === 'POST') {
-    const { title, description } = req.body;
-
-    const series = new Series({
-        nombre,
-        descripcion,
-        temporadas,
-        servicio,
-        categoria,
-        userId: session.user.id,
-    });
-
-    await series.save();
-
-    return res.status(201).json(series);
-  } else if (req.method === 'GET') {
-        const series = await Series.find();
-        return res.status(200).json(series);
+    try {
+      const newSeries = await addSeries(nombre, descripcion, temporadas, servicio, categoria, '0', '0', userId);
+      res.status(201).json(newSeries);
+    } catch (error) {
+      console.error('Error adding series:', error);
+      res.status(500).json({ error: 'Error adding series' });
+    }
   } else {
-        return res.status(405).json({ message: 'Method not allowed' });
+    res.setHeader('Allow', ['GET', 'POST']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
-};
+}

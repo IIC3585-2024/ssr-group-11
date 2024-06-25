@@ -1,10 +1,34 @@
-import mongoose from 'mongoose';
+import { Model, DataTypes } from 'sequelize';
 
-const ReviewSchema = new mongoose.Schema({
-  seriesId: { type: mongoose.Schema.Types.ObjectId, ref: 'Series', required: true },
-  userId: { type: String, required: true },
-  rating: { type: Number, required: true },
-  comment: { type: String, required: true },
-});
+export default class Review extends Model {
+  static init(sequelize) {
+    return super.init({
+      seriesId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Series',
+          key: 'id',
+        },
+      },
+      userId: {
+        type: DataTypes.STRING,
+      },
+      rating: {
+        type: DataTypes.INTEGER,
+      },
+      comment: {
+        type: DataTypes.TEXT,
+      },
+    }, {
+      sequelize,
+      modelName: 'Review',
+    });
+  }
 
-export default mongoose.models.Review || mongoose.model('Review', ReviewSchema);
+  static associate(models) {
+    this.belongsTo(models.Series, {
+      foreignKey: 'seriesId',
+      as: 'series',
+    });
+  }
+}
