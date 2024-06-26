@@ -5,8 +5,7 @@ export default async function handler(req, res) {
   await db.sequelize.sync();
   if (req.method === 'GET') {
     try {
-      const series = await db.Serie.findAll();
-      console.log(series)
+      const series = await db.Serie.findAll({ include: 'reviews' });
       res.status(200).json(series);
     } catch (error) {
       console.error('Error fetching series:', error);

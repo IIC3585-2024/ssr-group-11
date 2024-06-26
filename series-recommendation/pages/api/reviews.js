@@ -1,4 +1,5 @@
 import db from '../../models';
+import { getSession } from 'next-auth/react';
 
 export default async function handler(req, res) {
   await db.sequelize.sync();
@@ -14,10 +15,23 @@ export default async function handler(req, res) {
     }
   } else if (req.method === 'POST') {
     const { serieId, rating, comment } = req.body;
-    const userId = req.session.id;
 
     try {
-      const newReview = await db.Review.create({ serieId, userId, rating, comment });
+      const newReview = await db.Review.create({ serieId, userId: '0', rating, comment });
+      // Obtener todos los comentarios de la serie
+      const reviews = await db.Review.findAll({ where: { serieId } });
+
+      // Calcular las nuevas estrellas y calificaciones
+      const totalRatings = reviews.reduce((acc, review) => acc + review.rating, 0);
+      const newCalificaciones = reviews.length;
+      const newEstrellas =  parseInt(totalRatings / newCalificaciones);
+
+      // Actualizar la serie
+      await db.Serie.update(
+        { estrellas: newEstrellas, calificaciones: newCalificaciones },
+        { where: { id: serieId } }
+      );
+
       res.status(201).json(newReview);
     } catch (error) {
       console.error('Error adding review:', error);

@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 const SeriesItem = ({ serie }) => {
   return (
@@ -10,6 +11,10 @@ const SeriesItem = ({ serie }) => {
       <p className="mb-1">
         <strong>Estrellas:</strong> {serie.estrellas} ({serie.calificaciones} calificaciones)
       </p>
+      <Link href={`/series/${serie.id}`} legacyBehavior>
+        <a className="inline-block bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 mt-4" 
+        >Detalles</a>
+      </Link>
     </div>
   );
 };
