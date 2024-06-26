@@ -8,6 +8,10 @@ export default function AddSeries({ session }) {
   const [servicio, setServicio] = useState('');
   const [categoria, setCategoria] = useState('');
 
+  const CATEGORIES = ['Todos', 'Drama', 'Comedia', 'Romance', 'Ciencia Ficcion', 'Acción', 'Thriller', 'Documental', 'Fantasía', 'Animación', 'Infantil']
+  const SERVICES = ['Todos', 'Netflix', 'Amazon Prime', 'HBO', 'Disney+', 'Apple TV+', 'Paramount+', 'HBO Max', 'Discovery+', 'Crunchyroll', 'Viki', 'Otro']
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -57,12 +61,14 @@ export default function AddSeries({ session }) {
               onChange={(e) => setNombre(e.target.value)}
               placeholder="Nombre"
               className="block w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+              required 
             />
             <textarea
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
               placeholder="Descripción"
               className="block w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+              required 
             />
             <textarea
               value={temporadas}
@@ -70,18 +76,32 @@ export default function AddSeries({ session }) {
               placeholder="Temporadas"
               className="block w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
             />
-            <textarea
+            <select
               value={servicio}
               onChange={(e) => setServicio(e.target.value)}
-              placeholder="Servicio Streaming"
               className="block w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-            />
-            <textarea
+              required 
+            >
+              <option value="">Selecciona un servicio</option>
+              {SERVICES.map((service) => (
+                <option key={service} value={service}>
+                  {service}
+                </option>
+              ))}
+            </select>
+            <select
               value={categoria}
               onChange={(e) => setCategoria(e.target.value)}
-              placeholder="Categoría"
               className="block w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-            />
+              required 
+            >
+              <option value="">Selecciona una categoría</option>
+              {CATEGORIES.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
             <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">Agregar Serie</button>
           </form>
         </div>

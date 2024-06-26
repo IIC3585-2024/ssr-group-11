@@ -2,10 +2,11 @@ import { Model, DataTypes } from 'sequelize';
 export default class Review extends Model {
   static init(sequelize) {
     return super.init({
-      seriesId: {
+      serieId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         references: {
-          model: 'Serie',
+          model: 'Series',
           key: 'id',
         },
       },
@@ -27,7 +28,7 @@ export default class Review extends Model {
   static associate(models) {
     this.belongsTo(models.Serie, {
       foreignKey: 'serieId',
-      as: 'series',
+      as: 'serie',
     });
   }
 }

@@ -36,9 +36,6 @@ function AuthLinks() {
   if (status === 'authenticated') {
     return (
       <div className="flex space-x-4">
-        <Link href="/search" legacyBehavior>
-          <a className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition">Buscador</a>
-        </Link>
         <Link href="/add_serie" legacyBehavior>
           <a className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition">Agregar Serie</a>
         </Link>
