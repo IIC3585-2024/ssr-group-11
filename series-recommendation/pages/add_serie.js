@@ -21,7 +21,7 @@ export default function AddSeries({ session }) {
     };
 
     try {
-      const res = await fetch('./api/series', {
+      const res = await fetch('/api/series', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

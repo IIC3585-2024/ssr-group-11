@@ -14,16 +14,16 @@ export default async function handler(req, res) {
     }
   } else if (req.method === 'POST') {
     const { nombre, descripcion, temporadas, servicio, categoria } = req.body;
-    const session = await getSession({ req });
+    // const session = await getSession({ req });
 
-    if (!session) {
-      return res.status(401).json({ error: 'Debe iniciar sesión' });
-    }
+    // if (!session) {
+    //   return res.status(401).json({ error: 'Debe iniciar sesión' });
+    // }
 
-    const userId = session.user.id; // Asegúrate de que el ID de usuario esté en la sesión
+    // const userId = session.user.id; // Asegúrate de que el ID de usuario esté en la sesión
 
     try {
-      const newSeries = await addSeries(nombre, descripcion, temporadas, servicio, categoria, 0, 0, userId);
+      const newSeries = await addSeries(nombre, descripcion, temporadas, servicio, categoria, 0, 0, '1');
       return res.status(201).json(newSeries);
     } catch (error) {
       console.error('Error adding series:', error);

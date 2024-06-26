@@ -5,7 +5,7 @@ export default class Review extends Model {
       seriesId: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'Series',
+          model: 'Serie',
           key: 'id',
         },
       },
@@ -25,8 +25,8 @@ export default class Review extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Series, {
-      foreignKey: 'seriesId',
+    this.belongsTo(models.Serie, {
+      foreignKey: 'serieId',
       as: 'series',
     });
   }

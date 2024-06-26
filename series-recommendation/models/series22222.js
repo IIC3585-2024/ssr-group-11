@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 
-export default class Series extends Model {
+export default class Serie extends Model {
   static init(sequelize) {
     return super.init({
       nombre: {
@@ -12,7 +12,7 @@ export default class Series extends Model {
         allowNull: false,
       },
       temporadas: {
-        type: DataTypes.ARRAY(DataTypes.STRING), // Cambia a ARRAY de STRING o al tipo que necesites
+        type: DataTypes.STRING,
         allowNull: false,
       },
       servicio: {
@@ -43,7 +43,7 @@ export default class Series extends Model {
 
   static associate(models) {
     this.hasMany(models.Review, {
-      foreignKey: 'seriesId',
+      foreignKey: 'serieId',
       as: 'reviews',
     });
   }
