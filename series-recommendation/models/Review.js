@@ -1,5 +1,4 @@
 import { Model, DataTypes } from 'sequelize';
-
 export default class Review extends Model {
   static init(sequelize) {
     return super.init({

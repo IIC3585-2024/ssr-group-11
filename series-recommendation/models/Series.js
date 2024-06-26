@@ -1,5 +1,3 @@
-// models/series.js
-
 import { Model, DataTypes } from 'sequelize';
 
 export default class Series extends Model {

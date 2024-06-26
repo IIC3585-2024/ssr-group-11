@@ -10,20 +10,18 @@ export default function AddSeries({ session }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!nombre || !descripcion) return;
 
-    let userId = session.id
+    // let userId = session.id
     const formData = {
       nombre,
       descripcion,
       temporadas,
       servicio,
       categoria,
-      userId
     };
 
     try {
-      const res = await fetch('/api/series', {
+      const res = await fetch('./api/series', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
