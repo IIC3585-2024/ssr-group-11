@@ -37,25 +37,25 @@ const Home = ({ session, series }) => {
 export async function getServerSideProps(context) {
   const session = await getSession(context);
   let series = []
-
+ 
   try {
-    const res = await fetch('/api/series', {
+    const res = await fetch('http://localhost:3000/api/series', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     });
+
     if (res.ok) {
       console.log('Series obtenidas con éxito');
-      const data = res.json();
-      series = data
+      series = await res.json();  // Extrae los datos de la respuesta usando res.json()
     } else {
-      console.error('Error en get series');
+      console.error('Error en get series:', res.status);
     }
   } catch (error) {
     console.error('Error en la solicitud:', error);
   }
-
+  
   return {
     props: { session, series },
   };

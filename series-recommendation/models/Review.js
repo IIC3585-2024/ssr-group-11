@@ -27,7 +27,7 @@ export default class Review extends Model {
   static associate(models) {
     this.belongsTo(models.Serie, {
       foreignKey: 'serieId',
-      as: 'series',
+      as: 'serie',
     });
   }
 }

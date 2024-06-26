@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import Series from './series.js';
+import Serie from './serie.js';
 import Review from './review.js';
 import configFile from '../config/config.js';
 
@@ -24,7 +24,7 @@ if (config.use_env_variable) {
 
 // Initialize models
 const models = {
-  Series: Series.init(sequelize, Sequelize),
+  Serie: Serie.init(sequelize, Sequelize),
   Review: Review.init(sequelize, Sequelize),
 };
 
